@@ -91,6 +91,25 @@
   .card p { font-size: 14.5px; color: #b8c4d6; flex: 1; }
   .meta { font-size: 12.5px; color: #7e90a8; margin-top: 12px; }
   .loading { color: #8fa3bd; padding: 20px 0; }
+  .video-card { padding: 0; overflow: hidden; }
+  .video-thumb {
+    position: relative; display: block; width: 100%; aspect-ratio: 16 / 9;
+    background: #000; cursor: pointer; border: none; padding: 0;
+  }
+  .video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .video-thumb .play {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 56px; height: 56px; border-radius: 50%; background: rgba(34, 211, 238, 0.92);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .video-thumb .play::after {
+    content: ""; border-style: solid; border-width: 11px 0 11px 18px;
+    border-color: transparent transparent transparent #0b1220; margin-left: 4px;
+  }
+  .video-thumb iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .video-info { padding: 14px 16px 16px; }
+  .video-info h3 { font-size: 15.5px; line-height: 1.4; margin-bottom: 4px; }
+  .video-info .meta { margin-top: 0; }
   footer {
     border-top: 1px solid #1e3a5f; margin-top: 40px; padding: 22px 0 30px;
     font-size: 13px; color: #7e90a8;
@@ -128,6 +147,10 @@
 
     <h2>Berita Crypto Hari Ini</h2>
     <div class="grid" id="news"><p class="loading">Memuat berita terbaru…</p></div>
+
+    <h2 style="margin-top: 30px;">🎬 Video Crypto Pilihan</h2>
+    <p style="color: #8fa3bd; font-size: 14.5px; margin: -8px 0 16px;">Video dari kreator crypto terkenal — klik gambar untuk menonton langsung di sini.</p>
+    <div class="grid" id="videos"><p class="loading">Memuat video…</p></div>
   </main>
 
   <footer>
@@ -209,6 +232,46 @@ fetch("news.json").then(function(r) { return r.json(); }).then(function(data) {
   s.type = "application/ld+json";
   s.textContent = JSON.stringify(ld);
   document.head.appendChild(s);
+  // Video pilihan: thumbnail ringan, klik untuk memutar (YouTube nocookie).
+  var vids = data.videos || [];
+  document.getElementById("videos").innerHTML = vids.map(function(v) {
+    return '<article class="card video-card">' +
+      '<button class="video-thumb" data-vid="' + v.id + '" aria-label="Putar video: ' + v.title.replace(/"/g, "") + '">' +
+      '<img src="https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg" alt="' + v.title.replace(/"/g, "") + '" loading="lazy">' +
+      '<span class="play"></span></button>' +
+      '<div class="video-info"><h3>' + v.title + '</h3>' +
+      '<div class="meta">' + v.channel + ' · <a href="https://www.youtube.com/watch?v=' + v.id + '" target="_blank" rel="noopener">Tonton di YouTube →</a></div></div></article>';
+  }).join("");
+  document.querySelectorAll(".video-thumb").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      var id = btn.getAttribute("data-vid");
+      btn.outerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0" ' +
+        'title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+        'allowfullscreen style="width:100%;aspect-ratio:16/9;border:0;display:block;"></iframe>';
+    });
+  });
+  var vld = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": vids.map(function(v, i) {
+      return {
+        "@type": "ListItem",
+        "position": i + 1,
+        "item": {
+          "@type": "VideoObject",
+          "name": v.title,
+          "author": { "@type": "Person", "name": v.channel },
+          "embedUrl": "https://www.youtube.com/embed/" + v.id,
+          "thumbnailUrl": "https://i.ytimg.com/vi/" + v.id + "/hqdefault.jpg",
+          "uploadDate": isoDate(data.updated_at || "2026-11-24")
+        }
+      };
+    })
+  };
+  var vs = document.createElement("script");
+  vs.type = "application/ld+json";
+  vs.textContent = JSON.stringify(vld);
+  document.head.appendChild(vs);
   // Harga live dari CoinGecko (USD + IDR); kalau gagal, tetap pakai snapshot harian.
   var ids = COINS.map(function(c) { return c.id; }).join(",");
   fetch("https://api.coingecko.com/api/v3/simple/price?ids=" + ids + "&vs_currencies=usd,idr&include_24hr_change=true")
