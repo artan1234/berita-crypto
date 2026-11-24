@@ -3,8 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Berita Kripto Harian — Update Crypto Setiap Hari</title>
-<meta name="description" content="Berita crypto terbaru setiap hari dalam Bahasa Indonesia: harga Bitcoin, Ethereum, dan kabar pasar kripto. Dirangkum dari sumber terpercaya.">
+<title>Berita Crypto Hari Ini — Harga Bitcoin &amp; Update Pasar Kripto</title>
+<meta name="description" content="Berita crypto hari ini dalam Bahasa Indonesia: harga Bitcoin, Ethereum, dan kabar pasar kripto terbaru, diperbarui setiap hari dari sumber terpercaya.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Berita Kripto Harian">
+<link rel="canonical" href="https://berita-crypto.netlify.app/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="id_ID">
+<meta property="og:site_name" content="Berita Kripto Harian">
+<meta property="og:title" content="Berita Crypto Hari Ini — Harga Bitcoin &amp; Update Pasar Kripto">
+<meta property="og:description" content="Berita crypto hari ini dalam Bahasa Indonesia: harga Bitcoin, Ethereum, dan kabar pasar kripto terbaru, diperbarui setiap hari.">
+<meta property="og:url" content="https://berita-crypto.netlify.app/">
+<meta property="og:image" content="https://berita-crypto.netlify.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Berita Crypto Hari Ini — Harga Bitcoin &amp; Update Pasar Kripto">
+<meta name="twitter:description" content="Berita crypto hari ini dalam Bahasa Indonesia: harga Bitcoin, Ethereum, dan kabar pasar kripto terbaru, diperbarui setiap hari.">
+<meta name="twitter:image" content="https://berita-crypto.netlify.app/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "Berita Kripto Harian",
+      "url": "https://berita-crypto.netlify.app/",
+      "inLanguage": "id-ID",
+      "description": "Berita crypto hari ini dalam Bahasa Indonesia, diperbarui setiap hari."
+    },
+    {
+      "@type": "Organization",
+      "name": "Berita Kripto Harian",
+      "url": "https://berita-crypto.netlify.app/",
+      "sameAs": [
+        "https://x.com/BoskuOnChain",
+        "https://www.instagram.com/boskuonchain/"
+      ]
+    }
+  ]
+}
+</script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -25,6 +62,8 @@
     display: inline-block; margin-top: 14px; font-size: 13px; color: #22d3ee;
     border: 1px solid #22d3ee55; border-radius: 999px; padding: 4px 12px;
   }
+  .intro { color: #b8c4d6; font-size: 15px; margin: 20px 0 4px; }
+  .intro b { color: #e6edf3; }
   .market { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 22px 0 6px; }
   .coin {
     background: #111c33; border: 1px solid #1e3a5f; border-radius: 12px;
@@ -62,7 +101,7 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="brand">Berita Kripto <span>Harian</span></div>
+    <h1 class="brand">Berita Kripto <span>Harian</span></h1>
     <p class="tagline">Update berita crypto setiap hari — dirangkum dalam Bahasa Indonesia dari sumber terpercaya.</p>
     <nav>
       <a href="index.html">Beranda</a>
@@ -74,6 +113,9 @@
   </header>
 
   <main>
+    <p class="intro">Berita crypto hari ini, <span id="today-date">24 November 2026</span>: harga Bitcoin hari ini <b id="btc-today">memuat…</b>. Di bawah ini rangkuman kabar pasar kripto terbaru — pergerakan harga, ETF, regulasi, dan perkembangan proyek — semuanya dalam Bahasa Indonesia.</p>
+
+    <h2>Harga Kripto Hari Ini</h2>
     <div class="market" id="prices">
       <div class="coin"><div class="sym">BTC</div><div class="price">memuat…</div></div>
       <div class="coin"><div class="sym">ETH</div><div class="price">memuat…</div></div>
@@ -84,7 +126,7 @@
     </div>
     <div class="fear" id="fear">Indeks Fear &amp; Greed: memuat…</div>
 
-    <h2>📰 Berita Terbaru</h2>
+    <h2>Berita Crypto Hari Ini</h2>
     <div class="grid" id="news"><p class="loading">Memuat berita terbaru…</p></div>
   </main>
 
@@ -111,6 +153,9 @@ var COINS = [
 function fmt(n) {
   return "$" + n.toLocaleString("en-US", { maximumFractionDigits: n < 1 ? 4 : 2 });
 }
+function fmtIDR(n) {
+  return "Rp" + Math.round(n).toLocaleString("id-ID");
+}
 function chgEl(v) {
   var cls = v >= 0 ? "up" : "down";
   var sign = v >= 0 ? "+" : "";
@@ -121,6 +166,10 @@ function renderPrices(list) {
     return '<div class="coin"><div class="sym">' + c.symbol + ' · ' + c.name + '</div>' +
       '<div class="price">' + fmt(c.price) + '</div>' + chgEl(c.change_24h) + '</div>';
   }).join("");
+}
+function isoDate(str) {
+  var d = new Date(str);
+  return isNaN(d) ? "2026-11-24" : d.toISOString().slice(0, 10);
 }
 
 fetch("news.json").then(function(r) { return r.json(); }).then(function(data) {
@@ -133,12 +182,36 @@ fetch("news.json").then(function(r) { return r.json(); }).then(function(data) {
   document.getElementById("news").innerHTML = data.items.map(function(it) {
     return '<article class="card"><h3><a href="' + it.url + '" target="_blank" rel="noopener">' + it.title + '</a></h3>' +
       '<p>' + it.summary + '</p>' +
-      '<div class="meta">' + it.time + ' · ' + it.source + ' · <a href="' + it.url + '" target="_blank" rel="noopener">Baca sumber →</a></div></article>';
+      '<div class="meta"><time datetime="' + isoDate(it.time) + '">' + it.time + '</time> · ' + it.source + ' · <a href="' + it.url + '" target="_blank" rel="noopener">Baca sumber →</a></div></article>';
   }).join("");
   renderPrices(m.snapshot || []);
-  // Coba harga live dari CoinGecko; kalau gagal, tetap pakai snapshot harian.
+  // JSON-LD NewsArticle agar Google memahami tiap berita.
+  var ld = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": data.items.map(function(it, i) {
+      return {
+        "@type": "ListItem",
+        "position": i + 1,
+        "item": {
+          "@type": "NewsArticle",
+          "headline": it.title,
+          "description": it.summary,
+          "datePublished": isoDate(it.time),
+          "author": { "@type": "Organization", "name": "Berita Kripto Harian" },
+          "publisher": { "@type": "Organization", "name": "Berita Kripto Harian", "url": "https://berita-crypto.netlify.app/" },
+          "mainEntityOfPage": it.url
+        }
+      };
+    })
+  };
+  var s = document.createElement("script");
+  s.type = "application/ld+json";
+  s.textContent = JSON.stringify(ld);
+  document.head.appendChild(s);
+  // Harga live dari CoinGecko (USD + IDR); kalau gagal, tetap pakai snapshot harian.
   var ids = COINS.map(function(c) { return c.id; }).join(",");
-  fetch("https://api.coingecko.com/api/v3/simple/price?ids=" + ids + "&vs_currencies=usd&include_24hr_change=true")
+  fetch("https://api.coingecko.com/api/v3/simple/price?ids=" + ids + "&vs_currencies=usd,idr&include_24hr_change=true")
     .then(function(r) { return r.json(); })
     .then(function(live) {
       var list = COINS.map(function(c) {
@@ -147,8 +220,17 @@ fetch("news.json").then(function(r) { return r.json(); }).then(function(data) {
         return { symbol: c.sym, name: c.name, price: d.usd, change_24h: d.usd_24h_change || 0 };
       }).filter(Boolean);
       if (list.length) renderPrices(list);
+      var btc = live.bitcoin;
+      if (btc && btc.idr) {
+        document.getElementById("btc-today").textContent = fmt(btc.usd) + " (" + fmtIDR(btc.idr) + ")";
+      } else if (btc && btc.usd) {
+        document.getElementById("btc-today").textContent = fmt(btc.usd);
+      }
     })
-    .catch(function() {});
+    .catch(function() {
+      var snap = (m.snapshot || []).find(function(c) { return c.symbol === "BTC"; });
+      if (snap) document.getElementById("btc-today").textContent = fmt(snap.price);
+    });
 }).catch(function() {
   document.getElementById("news").innerHTML = "<p class='loading'>Berita belum bisa dimuat. Coba muat ulang halaman.</p>";
 });
