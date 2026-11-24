@@ -110,6 +110,34 @@
   .video-info { padding: 14px 16px 16px; }
   .video-info h3 { font-size: 15.5px; line-height: 1.4; margin-bottom: 4px; }
   .video-info .meta { margin-top: 0; }
+  .signal-card { padding: 18px; }
+  .signal-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .signal-head h3 { font-size: 18px; margin: 0; }
+  .signal-price { font-size: 15px; color: #8fa3bd; }
+  .badge {
+    display: inline-block; font-size: 12.5px; font-weight: 700;
+    border-radius: 999px; padding: 4px 12px;
+  }
+  .badge.bearish { background: rgba(248, 113, 113, 0.15); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.4); }
+  .badge.bullish { background: rgba(74, 222, 128, 0.12); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); }
+  .badge.mixed { background: rgba(251, 191, 36, 0.12); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); }
+  .signal-card p { font-size: 14.5px; color: #b8c4d6; margin-top: 10px; }
+  .levels { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; font-size: 14px; }
+  .levels b { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #7e90a8; margin-bottom: 2px; }
+  .levels .sup { color: #4ade80; } .levels .res { color: #f87171; }
+  .trade-box {
+    margin-top: 14px; background: #0b1220; border: 1px solid #22d3ee44;
+    border-radius: 10px; padding: 12px 14px; font-size: 14px;
+  }
+  .trade-box .row { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; }
+  .trade-box .row span:first-child { color: #8fa3bd; }
+  .trade-box .row span:last-child { font-weight: 700; }
+  .trade-box .note { color: #8fa3bd; font-size: 13px; margin-top: 8px; }
+  .disclaimer {
+    margin-top: 16px; font-size: 13px; color: #fbbf24;
+    background: rgba(251, 191, 36, 0.07); border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 12px; padding: 12px 16px;
+  }
   footer {
     border-top: 1px solid #1e3a5f; margin-top: 40px; padding: 22px 0 30px;
     font-size: 13px; color: #7e90a8;
@@ -151,6 +179,11 @@
     <h2 style="margin-top: 30px;">🎬 Video Crypto Pilihan</h2>
     <p style="color: #8fa3bd; font-size: 14.5px; margin: -8px 0 16px;">Video dari kreator crypto terkenal — klik gambar untuk menonton langsung di sini.</p>
     <div class="grid" id="videos"><p class="loading">Memuat video…</p></div>
+
+    <h2 style="margin-top: 30px;">📈 Sinyal BTC &amp; ETH</h2>
+    <p style="color: #8fa3bd; font-size: 14.5px; margin: -8px 0 16px;">Ringkasan analisa teknikal yang sudah dipublikasikan analis dan media kredibel — lengkap dengan level dan sumbernya.</p>
+    <div class="grid" id="signals"><p class="loading">Memuat sinyal…</p></div>
+    <div class="disclaimer">⚠️ Ini BUKAN rekomendasi beli/jual dari kami — hanya ringkasan dari analisa yang sudah dipublikasikan pihak lain, dan analisnya pun sering berbeda pendapat (lihat ETH di atas). Harga kripto bergerak cepat dan level bisa jebol kapan saja. Selalu riset sendiri (DYOR) dan jangan mempertaruhkan uang yang tidak siap hilang.</div>
   </main>
 
   <footer>
@@ -272,6 +305,34 @@ fetch("news.json").then(function(r) { return r.json(); }).then(function(data) {
   vs.type = "application/ld+json";
   vs.textContent = JSON.stringify(vld);
   document.head.appendChild(vs);
+  // Sinyal BTC & ETH dari news.json.
+  var sigs = data.signals || [];
+  document.getElementById("signals").innerHTML = sigs.map(function(s) {
+    var sup = s.support.map(function(x) { return "$" + x.toLocaleString("en-US"); }).join(" · ");
+    var res = s.resistance.map(function(x) { return "$" + x.toLocaleString("en-US"); }).join(" · ");
+    var tradeHtml = "";
+    if (s.trade) {
+      var t = s.trade;
+      tradeHtml = '<div class="trade-box">' +
+        '<div class="row"><span>Arah</span><span>' + t.direction + ' (' + t.source + ')</span></div>' +
+        '<div class="row"><span>Entry</span><span>$' + t.entry + '</span></div>' +
+        '<div class="row"><span>Take Profit</span><span>$' + t.tp1 + ' / $' + t.tp2 + '</span></div>' +
+        '<div class="row"><span>Stop Loss</span><span>$' + t.sl + '</span></div>' +
+        '<div class="row"><span>Risk : Reward</span><span>' + t.rr + '</span></div>' +
+        (t.note ? '<p class="note">' + t.note + '</p>' : "") +
+        '<p class="note">Setup: <a href="' + t.url + '" target="_blank" rel="noopener">lihat analisa lengkap →</a></p></div>';
+    } else {
+      tradeHtml = '<p style="margin-top:12px;font-size:13.5px;color:#8fa3bd;">Tidak ada setup entry eksplisit dari sumber hari ini — pantau level support &amp; resistance di atas.</p>';
+    }
+    return '<article class="card signal-card"><div class="signal-head"><h3>' + s.symbol + ' · ' + s.name + '</h3>' +
+      '<span class="badge ' + s.bias_class + '">' + s.bias + '</span></div>' +
+      '<div class="signal-price">Harga saat analisa: $' + s.price.toLocaleString("en-US") + '</div>' +
+      '<p>' + s.summary + '</p>' +
+      '<div class="levels"><div><b>Support</b><span class="sup">' + sup + '</span></div>' +
+      '<div><b>Resistance</b><span class="res">' + res + '</span></div></div>' +
+      tradeHtml +
+      '<div class="meta">' + s.date + ' · Sumber: ' + s.source + ' · <a href="' + s.url + '" target="_blank" rel="noopener">Baca analisa →</a></div></article>';
+  }).join("");
   // Harga live dari CoinGecko (USD + IDR); kalau gagal, tetap pakai snapshot harian.
   var ids = COINS.map(function(c) { return c.id; }).join(",");
   fetch("https://api.coingecko.com/api/v3/simple/price?ids=" + ids + "&vs_currencies=usd,idr&include_24hr_change=true")

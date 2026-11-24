@@ -124,5 +124,61 @@
       "title": "Tom Lee says Ethereum ETH price is about to get out of control",
       "channel": "Altcoin Daily"
     }
+  ],
+  "signals": [
+    {
+      "symbol": "BTC",
+      "name": "Bitcoin",
+      "price": 60124,
+      "bias": "Bearish jangka pendek",
+      "bias_class": "bearish",
+      "summary": "BTC di bawah semua EMA utama (50/100/200 hari) dengan RSI sekitar 25 (oversold) dan MACD negatif — tekanan jual masih dominan. Binance Square: selama bertahan di atas $55.130, peluang relief ke $64.500 lalu $70K–$72K masih ada, tapi sampai $70K–$72K direbut kembali, kenaikan dianggap pantulan taktis, bukan bottom terkonfirmasi.",
+      "support": [
+        57000,
+        55130,
+        53000
+      ],
+      "resistance": [
+        62377,
+        64000,
+        67000
+      ],
+      "trade": null,
+      "source": "FXStreet & Binance Square",
+      "url": "https://www.fxstreet.com/cryptocurrencies/news/crypto-today-bitcoin-and-ethereum-edge-lower-xrp-stabilizes-as-etf-redemptions-continue-202611241045",
+      "date": "24 Nov 2026"
+    },
+    {
+      "symbol": "ETH",
+      "name": "Ethereum",
+      "price": 1696,
+      "bias": "Bullish (setup) vs Bearish (tren)",
+      "bias_class": "mixed",
+      "summary": "Dua pandangan berbeda hari ini. Lingrid (TradingView): ETH keluar dari falling wedge multi-minggu setelah menyapu likuiditas di bawah $1.600 — setup bullish dengan retest zona demand $1.750. FXStreet sebaliknya menilai tren jangka pendek masih bearish: ETH di bawah SuperTrend $1.982 dan EMA 50/100/200 hari.",
+      "support": [
+        1672,
+        1612,
+        1540
+      ],
+      "resistance": [
+        1742,
+        1844,
+        1980
+      ],
+      "trade": {
+        "direction": "Long",
+        "entry": "1.740–1.780",
+        "tp1": "1.980",
+        "tp2": "2.200",
+        "sl": "1.640",
+        "rr": "1:3,6",
+        "note": "Tunggu konfirmasi close candle 8H di atas resistance wedge + retest zona demand $1.750 sebelum masuk penuh.",
+        "source": "Lingrid via TradingView",
+        "url": "https://www.tradingview.com/chart/ETHUSDT/Unwjmr4T-Ethereum-Bullish-Falling-Wedge-Breakout-1-750-Demand-Retes/"
+      },
+      "source": "TradingView (Lingrid) & FXStreet",
+      "url": "https://www.tradingview.com/chart/ETHUSDT/Unwjmr4T-Ethereum-Bullish-Falling-Wedge-Breakout-1-750-Demand-Retes/",
+      "date": "24 Nov 2026"
+    }
   ]
 }
