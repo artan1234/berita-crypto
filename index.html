@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berita Kripto Harian — Update Crypto Setiap Hari</title>
+<meta name="description" content="Berita crypto terbaru setiap hari dalam Bahasa Indonesia: harga Bitcoin, Ethereum, dan kabar pasar kripto. Dirangkum dari sumber terpercaya.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #0b1220; color: #e6edf3; line-height: 1.6;
+  }
+  a { color: #22d3ee; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 18px; }
+  header { border-bottom: 1px solid #1e3a5f; padding: 22px 0 18px; }
+  .brand { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+  .brand span { color: #22d3ee; }
+  .tagline { color: #8fa3bd; font-size: 14.5px; margin-top: 4px; }
+  nav { margin-top: 12px; font-size: 14px; }
+  nav a { margin-right: 18px; color: #b8c4d6; }
+  nav a:hover { color: #22d3ee; }
+  .updated {
+    display: inline-block; margin-top: 14px; font-size: 13px; color: #22d3ee;
+    border: 1px solid #22d3ee55; border-radius: 999px; padding: 4px 12px;
+  }
+  .market { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 22px 0 6px; }
+  .coin {
+    background: #111c33; border: 1px solid #1e3a5f; border-radius: 12px;
+    padding: 12px 14px;
+  }
+  .coin .sym { font-size: 13px; color: #8fa3bd; letter-spacing: 1px; }
+  .coin .price { font-size: 18px; font-weight: 700; margin-top: 2px; }
+  .coin .chg { font-size: 13px; font-weight: 600; }
+  .up { color: #4ade80; } .down { color: #f87171; }
+  .fear {
+    background: #111c33; border: 1px solid #1e3a5f; border-radius: 12px;
+    padding: 12px 16px; margin: 10px 0 26px; font-size: 14.5px; color: #b8c4d6;
+  }
+  .fear b { color: #f87171; }
+  h2 { font-size: 20px; margin: 8px 0 16px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
+  .card {
+    background: #111c33; border: 1px solid #1e3a5f; border-radius: 14px;
+    padding: 18px; display: flex; flex-direction: column;
+  }
+  .card h3 { font-size: 17px; line-height: 1.4; margin-bottom: 8px; }
+  .card h3 a { color: #e6edf3; }
+  .card h3 a:hover { color: #22d3ee; }
+  .card p { font-size: 14.5px; color: #b8c4d6; flex: 1; }
+  .meta { font-size: 12.5px; color: #7e90a8; margin-top: 12px; }
+  .loading { color: #8fa3bd; padding: 20px 0; }
+  footer {
+    border-top: 1px solid #1e3a5f; margin-top: 40px; padding: 22px 0 30px;
+    font-size: 13px; color: #7e90a8;
+  }
+  footer a { color: #8fa3bd; margin-right: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Berita Kripto <span>Harian</span></div>
+    <p class="tagline">Update berita crypto setiap hari — dirangkum dalam Bahasa Indonesia dari sumber terpercaya.</p>
+    <nav>
+      <a href="index.html">Beranda</a>
+      <a href="tentang.html">Tentang</a>
+      <a href="privasi.html">Privasi</a>
+      <a href="kontak.html">Kontak</a>
+    </nav>
+    <div class="updated">🕒 Diperbarui: <span id="updated-at">memuat…</span></div>
+  </header>
+
+  <main>
+    <div class="market" id="prices">
+      <div class="coin"><div class="sym">BTC</div><div class="price">memuat…</div></div>
+      <div class="coin"><div class="sym">ETH</div><div class="price">memuat…</div></div>
+      <div class="coin"><div class="sym">SOL</div><div class="price">memuat…</div></div>
+      <div class="coin"><div class="sym">XRP</div><div class="price">memuat…</div></div>
+      <div class="coin"><div class="sym">BNB</div><div class="price">memuat…</div></div>
+      <div class="coin"><div class="sym">DOGE</div><div class="price">memuat…</div></div>
+    </div>
+    <div class="fear" id="fear">Indeks Fear &amp; Greed: memuat…</div>
+
+    <h2>📰 Berita Terbaru</h2>
+    <div class="grid" id="news"><p class="loading">Memuat berita terbaru…</p></div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="tentang.html">Tentang</a>
+      <a href="privasi.html">Kebijakan Privasi</a>
+      <a href="kontak.html">Kontak</a>
+    </p>
+    <p style="margin-top:10px;">Berita dirangkum dari sumber publik dengan tautan ke artikel asli. Harga live dari CoinGecko. Konten ini hanya informasi, bukan nasihat investasi. © 2026 Berita Kripto Harian.</p>
+  </footer>
+</div>
+
+<script>
+var COINS = [
+  { id: "bitcoin",  sym: "BTC",  name: "Bitcoin"  },
+  { id: "ethereum", sym: "ETH",  name: "Ethereum" },
+  { id: "solana",   sym: "SOL",  name: "Solana"   },
+  { id: "ripple",   sym: "XRP",  name: "XRP"      },
+  { id: "binancecoin", sym: "BNB", name: "BNB"    },
+  { id: "dogecoin", sym: "DOGE", name: "Dogecoin" }
+];
+
+function fmt(n) {
+  return "$" + n.toLocaleString("en-US", { maximumFractionDigits: n < 1 ? 4 : 2 });
+}
+function chgEl(v) {
+  var cls = v >= 0 ? "up" : "down";
+  var sign = v >= 0 ? "+" : "";
+  return '<div class="chg ' + cls + '">' + sign + v.toFixed(1) + '% / 24j</div>';
+}
+function renderPrices(list) {
+  document.getElementById("prices").innerHTML = list.map(function(c) {
+    return '<div class="coin"><div class="sym">' + c.symbol + ' · ' + c.name + '</div>' +
+      '<div class="price">' + fmt(c.price) + '</div>' + chgEl(c.change_24h) + '</div>';
+  }).join("");
+}
+
+fetch("news.json").then(function(r) { return r.json(); }).then(function(data) {
+  document.getElementById("updated-at").textContent = data.updated_at || "";
+  var m = data.market || {};
+  document.getElementById("fear").innerHTML =
+    "Indeks Fear &amp; Greed: <b>" + m.fear_greed + " (" + m.fear_greed_label + ")</b> &nbsp;·&nbsp; " +
+    "Total kapitalisasi pasar: <b>" + m.total_market_cap + "</b> &nbsp;·&nbsp; " +
+    "Dominasi Bitcoin: <b>" + m.btc_dominance + "</b>";
+  document.getElementById("news").innerHTML = data.items.map(function(it) {
+    return '<article class="card"><h3><a href="' + it.url + '" target="_blank" rel="noopener">' + it.title + '</a></h3>' +
+      '<p>' + it.summary + '</p>' +
+      '<div class="meta">' + it.time + ' · ' + it.source + ' · <a href="' + it.url + '" target="_blank" rel="noopener">Baca sumber →</a></div></article>';
+  }).join("");
+  renderPrices(m.snapshot || []);
+  // Coba harga live dari CoinGecko; kalau gagal, tetap pakai snapshot harian.
+  var ids = COINS.map(function(c) { return c.id; }).join(",");
+  fetch("https://api.coingecko.com/api/v3/simple/price?ids=" + ids + "&vs_currencies=usd&include_24hr_change=true")
+    .then(function(r) { return r.json(); })
+    .then(function(live) {
+      var list = COINS.map(function(c) {
+        var d = live[c.id];
+        if (!d || !d.usd) return null;
+        return { symbol: c.sym, name: c.name, price: d.usd, change_24h: d.usd_24h_change || 0 };
+      }).filter(Boolean);
+      if (list.length) renderPrices(list);
+    })
+    .catch(function() {});
+}).catch(function() {
+  document.getElementById("news").innerHTML = "<p class='loading'>Berita belum bisa dimuat. Coba muat ulang halaman.</p>";
+});
+</script>
+</body>
+</html>
