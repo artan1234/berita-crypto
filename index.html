@@ -62,6 +62,19 @@
   }
   .intro { color: #b8c4d6; font-size: 15px; margin: 20px 0 4px; }
   .intro b { color: #e6edf3; }
+  .teaser {
+    display: flex; justify-content: space-between; align-items: center; gap: 14px;
+    background: linear-gradient(135deg, #111c33, #0e2a3d);
+    border: 1px solid #22d3ee66; border-radius: 14px;
+    padding: 16px 18px; margin: 20px 0 6px;
+  }
+  .teaser b { font-size: 16.5px; }
+  .teaser p { color: #b8c4d6; font-size: 14px; margin-top: 2px; }
+  .teaser-btn {
+    background: #22d3ee; color: #0b1220; font-weight: 700; font-size: 14px;
+    padding: 10px 16px; border-radius: 999px; white-space: nowrap; flex-shrink: 0;
+  }
+  .teaser-btn:hover { text-decoration: none; opacity: 0.9; }
   .market { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 22px 0 6px; }
   .coin {
     background: #111c33; border: 1px solid #1e3a5f; border-radius: 12px;
@@ -159,6 +172,14 @@
   </header>
 
   <main>
+    <div class="teaser">
+      <div>
+        <b>📈 Prediksi Crypto — BTC &amp; ETH hari ini</b>
+        <p>Sinyal dari analisa teknikal media kredibel: bias, level support &amp; resistance, dan setup entry/TP/SL bila ada.</p>
+      </div>
+      <a href="prediksi.html" class="teaser-btn">Lihat Prediksi →</a>
+    </div>
+
     <p class="intro">Berita crypto hari ini, <span id="today-date">24 November 2026</span>: harga Bitcoin hari ini <b id="btc-today">memuat…</b>. Di bawah ini rangkuman kabar pasar kripto terbaru — pergerakan harga, ETF, regulasi, dan perkembangan proyek — semuanya dalam Bahasa Indonesia.</p>
 
     <h2>Harga Kripto Hari Ini</h2>
@@ -178,9 +199,6 @@
     <h2 style="margin-top: 30px;">🎬 Video Crypto Pilihan</h2>
     <p style="color: #8fa3bd; font-size: 14.5px; margin: -8px 0 16px;">Video dari kreator crypto terkenal — klik gambar untuk menonton langsung di sini.</p>
     <div class="grid" id="videos"><p class="loading">Memuat video…</p></div>
-
-    <h2 style="margin-top: 30px;">📈 Prediksi Crypto</h2>
-    <p style="color: #8fa3bd; font-size: 14.5px; margin: -8px 0 16px;">Sinyal BTC &amp; ETH hari ini dari analisa teknikal media kredibel — bias, level support &amp; resistance, dan setup entry/TP/SL bila ada. <a href="prediksi.html">Lihat prediksi lengkap →</a></p>
   </main>
 
   <footer>
